@@ -11,7 +11,6 @@ $axios('https://pokeapi.co/api/v2/pokemon/?limit=151')
     response.data.results.forEach(({ url }) => 
       $axios(url)
     .then(response => {
-              console.log(response)
       const imgPath = response.data.sprites.other['official-artwork'].front_default;
       $axios(response.data.species.url)
       .then(response => {
@@ -22,11 +21,17 @@ $axios('https://pokeapi.co/api/v2/pokemon/?limit=151')
         characterElement.appendChild(fragment);
         characterElement.classList.add('list');
         console.log(response);
-      });
-    }));
+      })
+      .catch(error => {
+        characterElement.after(createErrorElement(error));
+        });
+    }))
+    .catch(error => {
+        characterElement.after(createErrorElement(error));
+        });
   })
   .catch(error => {
         console.log(error)
         characterElement.after(createErrorElement(error));
-        });;
+        });
 });
